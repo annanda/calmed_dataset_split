@@ -22,10 +22,10 @@ def concat_and_save_datasets(list_datasets, session_number):
 
 
 if __name__ == '__main__':
-    list_datasets = ['session_01_01_01.csv',
-                     'session_01_01_02.csv',
-                     'session_01_01_03.csv',
-                     'session_01_01_04.csv',
-                     'session_01_01_05.csv',
-                     'session_01_01_06.csv']
-    concat_and_save_datasets(list_datasets, session_number='session_01_01')
+    list_datasets = ['session_04_01_01.csv',
+                     'session_04_01_02.csv',
+                     'session_04_01_03.csv',
+                     'session_04_01_04.csv',
+                     'session_04_01_05.csv',
+                     ]
+    concat_and_save_datasets(list_datasets, session_number='session_04_01')
