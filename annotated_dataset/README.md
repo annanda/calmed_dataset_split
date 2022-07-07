@@ -4,3 +4,7 @@
 
 1. Change the ```main``` function from ```split_dataset_individual.py``` file with the names of the files regarding the
    intended session. 
+
+## To divide annotation from a session into different classes
+
+## To split 
