@@ -9,6 +9,7 @@ import pandas as pd
 main_folder = pathlib.Path(__file__).parent.parent.absolute()
 path_annotated_dataset_directory = os.path.join(main_folder, 'annotated_dataset')
 pkl_folder = os.path.join(main_folder, 'pkl_datasets')
+pkl_classes_folder = os.path.join(pkl_folder, 'per_class')
 
 
 def concat_and_save_datasets(lst_datasets, session_number):
@@ -32,7 +33,7 @@ def separate_annotation_classes(session_number):
     """
     file = session_number + '.pkl'
     read_folder = pkl_folder
-    write_folder = os.path.join(pkl_folder, 'per_class', session_number)
+    write_folder = os.path.join(pkl_classes_folder, session_number)
     main_df = pd.read_pickle(os.path.join(read_folder, file))
     emotions = ['green', 'blue', 'yellow', 'red']
     for emotion in emotions:
@@ -43,6 +44,20 @@ def separate_annotation_classes(session_number):
         emotion_df.to_pickle(output_folder_path + '_' + emotion + '.pkl')
 
 
+def split_classes_into_sets(session):
+    folder = os.path.join(pkl_classes_folder, session)
+    classes_files = os.listdir(folder)
+    for class_file in classes_files:
+        df = pd.read_pickle(folder + '/' + class_file)
+        df = df.reset_index(drop=True)
+        df = df.iloc[:, 1:]
+        train_df = df.sample(frac=0.8, random_state=25)
+        dev_test_df = df.drop(train_df.index)
+        dev_df = dev_test_df.sample(frac=0.5, random_state=25)
+        test_df = dev_test_df.drop(dev_df.index)
+        print('yay')
+
+
 if __name__ == '__main__':
     list_datasets = ['session_04_02_01.csv',
                      'session_04_02_02.csv',
@@ -51,4 +66,5 @@ if __name__ == '__main__':
                      'session_04_02_05.csv',
                      ]
     # concat_and_save_datasets(list_datasets, session_number='session_04_02')
-    separate_annotation_classes('session_01_01')
+    # separate_annotation_classes('session_01_01')
+    split_classes_into_sets('session_01_01')
