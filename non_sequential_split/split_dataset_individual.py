@@ -2,26 +2,27 @@
 Splitting dataset into train, dev and test sets within the same individual, i.e. each individual will have a train, dev
 and test sets of annotated data.
 """
-import pathlib
+
 import os.path
 import pandas as pd
 
-main_folder = pathlib.Path(__file__).parent.parent.absolute()
-path_annotated_dataset_directory = os.path.join(main_folder, 'annotated_dataset')
-pkl_folder = os.path.join(main_folder, 'pkl_datasets')
-pkl_classes_folder = os.path.join(pkl_folder, 'per_class')
+from setup.conf import ANNOTATED_DATASET_DIRECTORY, \
+    PKL_DIRECTORY, \
+    PER_CLASS_PKL_DIRECTORY, \
+    SPLIT_PKL_DIRECTORY, \
+    PER_CLASS_SPLIT_PKL_DIRECTORY
 
 
 def concat_and_save_datasets(lst_datasets, session_number):
     df_list = []
     for dataset in lst_datasets:
-        path_dataset = os.path.join(path_annotated_dataset_directory, session_number, dataset)
+        path_dataset = os.path.join(ANNOTATED_DATASET_DIRECTORY, session_number, dataset)
         df = pd.read_csv(path_dataset)
         df_list.append(df)
     result_df = pd.concat(df_list)
-    if not os.path.exists(pkl_folder):
-        os.makedirs(pkl_folder)
-    result_df.to_pickle(pkl_folder + '/' + session_number + '.pkl')
+    if not os.path.exists(PKL_DIRECTORY):
+        os.makedirs(PKL_DIRECTORY)
+    result_df.to_pickle(PKL_DIRECTORY + '/' + session_number + '.pkl')
 
 
 def separate_annotation_classes(session_number):
@@ -32,8 +33,8 @@ def separate_annotation_classes(session_number):
     :return: None
     """
     file = session_number + '.pkl'
-    read_folder = pkl_folder
-    write_folder = os.path.join(pkl_classes_folder, session_number)
+    read_folder = PKL_DIRECTORY
+    write_folder = os.path.join(PER_CLASS_PKL_DIRECTORY, session_number)
     main_df = pd.read_pickle(os.path.join(read_folder, file))
     emotions = ['green', 'blue', 'yellow', 'red']
     for emotion in emotions:
@@ -45,9 +46,9 @@ def separate_annotation_classes(session_number):
 
 
 def split_classes_into_sets(session):
-    folder = os.path.join(pkl_classes_folder, session)
+    folder = os.path.join(PER_CLASS_PKL_DIRECTORY, session)
     classes_files = os.listdir(folder)
-    output_folder = os.path.join(pkl_folder, 'per_class_split', session)
+    output_folder = os.path.join(PER_CLASS_SPLIT_PKL_DIRECTORY, session)
     for class_file in classes_files:
         emotion = class_file.split('_')[-1]
         emotion = emotion.replace('.pkl', '')
@@ -66,8 +67,7 @@ def split_classes_into_sets(session):
 
 
 def concatenate_sets(session):
-    folder = os.path.join(pkl_folder, 'per_class_split', session)
-    split_folder = os.path.join(pkl_folder, 'split')
+    folder = os.path.join(PER_CLASS_SPLIT_PKL_DIRECTORY, session)
     files_in_folder = os.listdir(folder)
     train = []
     test = []
@@ -85,9 +85,9 @@ def concatenate_sets(session):
     df_train = pd.concat(train)
     df_dev = pd.concat(dev)
     df_test = pd.concat(test)
-    if not os.path.exists(split_folder):
-        os.makedirs(split_folder)
-    output_folder = os.path.join(split_folder, session)
+    if not os.path.exists(SPLIT_PKL_DIRECTORY):
+        os.makedirs(SPLIT_PKL_DIRECTORY)
+    output_folder = os.path.join(SPLIT_PKL_DIRECTORY, session)
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     df_train.to_pickle(output_folder + '/' + session + '_train.pkl')
