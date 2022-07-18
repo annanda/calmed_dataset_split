@@ -10,7 +10,8 @@ from setup.conf import ANNOTATED_DATASET_DIRECTORY, \
     PKL_DIRECTORY, \
     PER_CLASS_PKL_DIRECTORY, \
     SPLIT_PKL_DIRECTORY, \
-    PER_CLASS_SPLIT_PKL_DIRECTORY
+    PER_CLASS_SPLIT_PKL_DIRECTORY, \
+    PKL_DIRECTORY_LABELS
 
 
 def concat_and_save_datasets(lst_datasets, session_number):
@@ -33,7 +34,7 @@ def separate_annotation_classes(session_number):
     :return: None
     """
     file = session_number + '.pkl'
-    read_folder = PKL_DIRECTORY
+    read_folder = PKL_DIRECTORY_LABELS
     write_folder = os.path.join(PER_CLASS_PKL_DIRECTORY, session_number)
     main_df = pd.read_pickle(os.path.join(read_folder, file))
     emotions = ['green', 'blue', 'yellow', 'red']
@@ -90,9 +91,29 @@ def concatenate_sets(session):
     output_folder = os.path.join(SPLIT_PKL_DIRECTORY, session)
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
+
+    df_train = add_frametime_key_to_labels(df_train, session)
+    df_dev = add_frametime_key_to_labels(df_dev, session)
+    df_test = add_frametime_key_to_labels(df_test, session)
+
     df_train.to_pickle(output_folder + '/' + session + '_train.pkl')
     df_dev.to_pickle(output_folder + '/' + session + '_dev.pkl')
     df_test.to_pickle(output_folder + '/' + session + '_test.pkl')
+    # CSV
+    df_train.to_csv(output_folder + '/' + session + '_train.csv')
+    df_dev.to_csv(output_folder + '/' + session + '_dev.csv')
+    df_test.to_csv(output_folder + '/' + session + '_test.csv')
+
+
+def add_frametime_key_to_labels(dataframe, session_number):
+    dataframe['frametime'] = dataframe.apply(lambda row: create_frametime(row, session=session_number), axis=1)
+    return dataframe
+
+
+def create_frametime(row, session):
+    time_value = row['time_of_video_seconds']
+    video_part = row['video_part']
+    return f'{session}_0{video_part}___{time_value}'
 
 
 def main_split(session):
@@ -105,15 +126,15 @@ if __name__ == '__main__':
     ###################
     # 1. If the data of a session is not together into one file:
 
-    # list_datasets = ['session_04_02_01.csv',
-    #                  'session_04_02_02.csv',
-    #                  'session_04_02_03.csv',
-    #                  'session_04_02_04.csv',
-    #                  'session_04_02_05.csv',
+    # list_datasets = ['session_04_01_01.csv',
+    #                  'session_04_01_02.csv',
+    #                  'session_04_01_03.csv',
+    #                  'session_04_01_04.csv',
+    #                  'session_04_01_05.csv',
     #                  ]
-    # concat_and_save_datasets(list_datasets, session_number='session_04_02')
+    # concat_and_save_datasets(list_datasets, session_number='session_04_01')
 
     ###################
     # 2. To split into train, dev and test sets
 
-    main_split('session_04_02')
+    main_split('session_01_01')
