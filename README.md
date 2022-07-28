@@ -1,4 +1,5 @@
-# Project to split the working dataset into Train, Dev and Test balanced sets
+# Dataset Splitting
+Project to split the working dataset into Train, Dev and Test balanced sets
 
 ## To generate a .pkl with all parts of a session annotated dataset
 
@@ -8,3 +9,6 @@
 ## To divide annotation from a session into different classes
 
 ## To split 
+
+1. Split Dataset of labels 
+2. Split dataset of features following the label's dataset split.

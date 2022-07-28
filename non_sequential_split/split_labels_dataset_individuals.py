@@ -137,4 +137,18 @@ if __name__ == '__main__':
     ###################
     # 2. To split into train, dev and test sets
 
-    main_split('session_01_01')
+    sessions = [
+        'session_01_01',
+        'session_02_01',
+        'session_02_02',
+        'session_03_01',
+        'session_03_02',
+        'session_04_01',
+        'session_04_02',
+    ]
+    # For all the sessions at once
+    for session in sessions:
+        main_split(session)
+
+    # For one specific session
+    # main_split('session_01_01')
