@@ -6,10 +6,10 @@ and test sets of annotated data.
 import os.path
 import pandas as pd
 
-from setup.conf import ANNOTATED_DATASET_DIRECTORY, \
+from non_sequential_split.conf import ANNOTATED_DATASET_DIRECTORY, \
     PKL_DIRECTORY, \
+    SPLIT_PKL_DIRECTORY_LABELS, \
     PER_CLASS_PKL_DIRECTORY, \
-    SPLIT_PKL_DIRECTORY, \
     PER_CLASS_SPLIT_PKL_DIRECTORY, \
     PKL_DIRECTORY_LABELS
 
@@ -86,15 +86,19 @@ def concatenate_sets(session):
     df_train = pd.concat(train)
     df_dev = pd.concat(dev)
     df_test = pd.concat(test)
-    if not os.path.exists(SPLIT_PKL_DIRECTORY):
-        os.makedirs(SPLIT_PKL_DIRECTORY)
-    output_folder = os.path.join(SPLIT_PKL_DIRECTORY, session)
+    if not os.path.exists(SPLIT_PKL_DIRECTORY_LABELS):
+        os.makedirs(SPLIT_PKL_DIRECTORY_LABELS)
+    output_folder = os.path.join(SPLIT_PKL_DIRECTORY_LABELS, session)
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
     df_train = add_frametime_key_to_labels(df_train, session)
     df_dev = add_frametime_key_to_labels(df_dev, session)
     df_test = add_frametime_key_to_labels(df_test, session)
+
+    df_train = add_session_column_to_labels(df_train, session)
+    df_dev = add_session_column_to_labels(df_dev, session)
+    df_test = add_session_column_to_labels(df_test, session)
 
     df_train.to_pickle(output_folder + '/' + session + '_train.pkl')
     df_dev.to_pickle(output_folder + '/' + session + '_dev.pkl')
@@ -103,6 +107,11 @@ def concatenate_sets(session):
     df_train.to_csv(output_folder + '/' + session + '_train.csv')
     df_dev.to_csv(output_folder + '/' + session + '_dev.csv')
     df_test.to_csv(output_folder + '/' + session + '_test.csv')
+
+
+def add_session_column_to_labels(dataframe, session):
+    dataframe['session'] = dataframe.apply(lambda row: session, axis=1)
+    return dataframe
 
 
 def add_frametime_key_to_labels(dataframe, session_number):
@@ -149,6 +158,6 @@ if __name__ == '__main__':
     # For all the sessions at once
     for session in sessions:
         main_split(session)
-
+    # concatenate_sets('session_01_01')
     # For one specific session
     # main_split('session_01_01')
