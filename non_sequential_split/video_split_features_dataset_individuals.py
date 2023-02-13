@@ -1,11 +1,11 @@
 import os.path
 import pandas as pd
 
-from setup.conf import FEATURES_DATASET_DIRECTORY, \
+from .conf import FEATURES_DATASET_DIRECTORY, \
     VIDEO_FEATURES_DATASET_DIRECTORY, SPLIT_PKL_DIRECTORY, PKL_DIRECTORY_FEATURES_VIDEO
 
 
-def generate_split_per_feature(session, feature):
+def generate_split_per_feature(session, feature, annotation_type='parents'):
     """
     It receives a feature name and generate the split train, dev, test sets for the dataset of the given feature.
     :param feature:
