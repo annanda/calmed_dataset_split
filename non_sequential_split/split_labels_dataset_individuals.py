@@ -89,9 +89,6 @@ def concatenate_sets(session, annotation_type):
     df_dev = pd.concat(dev)
     df_test = pd.concat(test)
     output_folder = os.path.join(PKL_DIRECTORY_LABELS, annotation_type, 'split', session)
-    # if not os.path.exists(SPLIT_PKL_DIRECTORY_LABELS):
-    #     os.makedirs(SPLIT_PKL_DIRECTORY_LABELS)
-    # output_folder = os.path.join(SPLIT_PKL_DIRECTORY_LABELS, session)
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -138,13 +135,13 @@ if __name__ == '__main__':
     ###################
     # 1. If the data of a session is not together into one file:
 
-    list_datasets = ['session_04_01_01.csv',
-                     'session_04_01_02.csv',
-                     'session_04_01_03.csv',
-                     'session_04_01_04.csv',
-                     'session_04_01_05.csv',
+    list_datasets = ['session_04_02_01.csv',
+                     'session_04_02_02.csv',
+                     'session_04_02_03.csv',
+                     'session_04_02_04.csv',
+                     'session_04_02_05.csv',
                      ]
-    concat_and_save_datasets(list_datasets, 'session_04_01', 'specialist')
+    # concat_and_save_datasets(list_datasets, 'session_04_02', 'specialist')
 
     ###################
     # 2. To split into train, dev and test sets
@@ -159,10 +156,10 @@ if __name__ == '__main__':
         'session_04_02',
     ]
     # For all the sessions at once
-    # for session in sessions:
-    #     main_split(session)
+    for session in sessions:
+        main_split(session, 'specialist')
     # for session in sessions:
     #     concatenate_sets(session)
     #
     # For one specific session
-    main_split('session_04_01', 'specialist')
+    # main_split('session_04_02', 'specialist')
