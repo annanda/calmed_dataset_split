@@ -1,24 +1,28 @@
 import os.path
 import pandas as pd
 
-from .conf import FEATURES_DATASET_DIRECTORY, \
-    VIDEO_FEATURES_DATASET_DIRECTORY, SPLIT_PKL_DIRECTORY, PKL_DIRECTORY_FEATURES_VIDEO
+from non_sequential_split.conf import FEATURES_DATASET_DIRECTORY, \
+    VIDEO_FEATURES_DATASET_DIRECTORY, PKL_DIRECTORY_LABELS, PKL_DIRECTORY_FEATURES_VIDEO, PKL_DIRECTORY_FEATURES
 
 
 def generate_split_per_feature(session, feature, annotation_type='parents'):
     """
     It receives a feature name and generate the split train, dev, test sets for the dataset of the given feature.
     :param feature:
+    :param annotation_type: str 'parents' or 'specialist' to tell which annotation to use.
     :return:
     """
-    train_label = pd.read_pickle(os.path.join(SPLIT_PKL_DIRECTORY, session, f'{session}_train.pkl'))
-    dev_label = pd.read_pickle(os.path.join(SPLIT_PKL_DIRECTORY, session, f'{session}_dev.pkl'))
-    test_label = pd.read_pickle(os.path.join(SPLIT_PKL_DIRECTORY, session, f'{session}_test.pkl'))
+    train_label = pd.read_pickle(
+        os.path.join(PKL_DIRECTORY_LABELS, annotation_type, 'split', session, f'{session}_train.pkl'))
+    dev_label = pd.read_pickle(
+        os.path.join(PKL_DIRECTORY_LABELS, annotation_type, 'split', session, f'{session}_dev.pkl'))
+    test_label = pd.read_pickle(
+        os.path.join(PKL_DIRECTORY_LABELS, annotation_type, 'split', session, f'{session}_test.pkl'))
 
     features_folder_read = os.path.join(VIDEO_FEATURES_DATASET_DIRECTORY, feature, session)
     all_feature_files = os.listdir(features_folder_read)
     all_feature_files = [file for file in all_feature_files if '.csv' in file]
-    features_folder_write = os.path.join(PKL_DIRECTORY_FEATURES_VIDEO, feature, session)
+    features_folder_write = os.path.join(PKL_DIRECTORY_FEATURES, annotation_type, 'video', feature, session)
     if not os.path.exists(features_folder_write):
         os.makedirs(features_folder_write)
 
@@ -28,12 +32,15 @@ def generate_split_per_feature(session, feature, annotation_type='parents'):
 
         result_train = train_label.merge(feature_pd, on="frametime", how='inner')
         result_train.to_pickle(os.path.join(features_folder_write, f'{name}_train.pkl'))
+        result_train.to_csv(os.path.join(features_folder_write, f'{name}_train.csv'))
 
         result_dev = dev_label.merge(feature_pd, on="frametime", how='inner')
         result_dev.to_pickle(os.path.join(features_folder_write, f'{name}_dev.pkl'))
+        result_dev.to_csv(os.path.join(features_folder_write, f'{name}_dev.csv'))
 
         result_test = test_label.merge(feature_pd, on="frametime", how='inner')
         result_test.to_pickle(os.path.join(features_folder_write, f'{name}_test.pkl'))
+        result_test.to_csv(os.path.join(features_folder_write, f'{name}_test.csv'))
 
 
 def generate_split_all_video_features():
@@ -58,12 +65,12 @@ def generate_split_all_video_features():
 
     for session in sessions:
         for feature in video_features:
-            generate_split_per_feature(session, feature)
+            generate_split_per_feature(session, feature, 'specialist')
 
 
 if __name__ == '__main__':
     # feature_name = '2d_eye_landmark'
-    # generate_split_per_feature('session_01_01', feature_name)
+    # generate_split_per_feature('session_01_01', feature_name, 'specialist')
     # testing_split_by_frametime()
 
     generate_split_all_video_features()
