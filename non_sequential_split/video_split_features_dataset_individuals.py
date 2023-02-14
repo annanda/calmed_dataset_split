@@ -31,16 +31,19 @@ def generate_split_per_feature(session, feature, annotation_type='parents'):
         feature_pd = pd.read_csv(os.path.join(features_folder_read, feature_file))
 
         result_train = train_label.merge(feature_pd, on="frametime", how='inner')
+        result_train = result_train.drop(columns=['session'])
         result_train.to_pickle(os.path.join(features_folder_write, f'{name}_train.pkl'))
-        result_train.to_csv(os.path.join(features_folder_write, f'{name}_train.csv'))
+        # result_train.to_csv(os.path.join(features_folder_write, f'{name}_train.csv'))
 
         result_dev = dev_label.merge(feature_pd, on="frametime", how='inner')
+        result_dev = result_dev.drop(columns=['session'])
         result_dev.to_pickle(os.path.join(features_folder_write, f'{name}_dev.pkl'))
-        result_dev.to_csv(os.path.join(features_folder_write, f'{name}_dev.csv'))
+        # result_dev.to_csv(os.path.join(features_folder_write, f'{name}_dev.csv'))
 
         result_test = test_label.merge(feature_pd, on="frametime", how='inner')
+        result_test = result_test.drop(columns=['session'])
         result_test.to_pickle(os.path.join(features_folder_write, f'{name}_test.pkl'))
-        result_test.to_csv(os.path.join(features_folder_write, f'{name}_test.csv'))
+        # result_test.to_csv(os.path.join(features_folder_write, f'{name}_test.csv'))
 
 
 def generate_split_all_video_features():
@@ -69,7 +72,7 @@ def generate_split_all_video_features():
 
 
 if __name__ == '__main__':
-    # feature_name = '2d_eye_landmark'
+    feature_name = 'AU'
     # generate_split_per_feature('session_01_01', feature_name, 'specialist')
     # testing_split_by_frametime()
 
