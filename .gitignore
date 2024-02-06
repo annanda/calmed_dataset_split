@@ -4,3 +4,5 @@ pkl_datasets/*
 *.xml
 *.iml
 .idea/
+/check_file.py
+/features_count.py
