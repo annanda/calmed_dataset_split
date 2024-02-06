@@ -50,7 +50,7 @@ def generate_split_per_feature(session, feature_group, feature_level='functional
             result_test.to_pickle(os.path.join(features_folder_write, f'{name}_test.pkl'))
 
 
-def generate_split_all_video_features():
+def generate_split_all_audio_features():
     sessions = [
         'session_01_01',
         'session_02_01',
@@ -77,4 +77,4 @@ if __name__ == '__main__':
     # generate_split_per_feature('session_01_01', 'frequency', annotation_type='specialist')
     # testing_split_by_frametime()
 
-    generate_split_all_video_features()
+    generate_split_all_audio_features()

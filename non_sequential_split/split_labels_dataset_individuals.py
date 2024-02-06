@@ -14,7 +14,7 @@ from non_sequential_split.conf import ANNOTATED_DATASET_DIRECTORY, \
     PKL_DIRECTORY_LABELS
 
 
-def concat_and_save_datasets(lst_datasets, session_number, annotation_type='parents'):
+def concat_and_save_datasets(lst_datasets, session_number, annotation_type):
     df_list = []
     for dataset in lst_datasets:
         path_dataset = os.path.join(ANNOTATED_DATASET_DIRECTORY, annotation_type, session_number, dataset)
@@ -135,12 +135,71 @@ if __name__ == '__main__':
     ###################
     # 1. If the data of a session is not together into one file:
 
-    list_datasets = ['session_04_02_01.csv',
-                     'session_04_02_02.csv',
-                     'session_04_02_03.csv',
-                     'session_04_02_04.csv',
-                     'session_04_02_05.csv',
-                     ]
+    # list_datasets = ['session_01_01_01.csv',
+    #                  'session_01_01_02.csv',
+    #                  'session_01_01_03.csv',
+    #                  'session_01_01_04.csv',
+    #                  'session_01_01_05.csv',
+    #                  'session_01_01_06.csv',
+    #                  'session_01_01_07.csv',
+    #                  ]
+    # concat_and_save_datasets(list_datasets, 'session_01_01', 'specialist')
+
+    # list_datasets = ['session_02_01_01.csv',
+    #                  'session_02_01_02.csv',
+    #                  'session_02_01_03.csv',
+    #                  'session_02_01_04.csv',
+    #                  'session_02_01_05.csv',
+    #                  'session_02_01_06.csv',
+    #                  ]
+    #
+    # concat_and_save_datasets(list_datasets, 'session_02_01', 'specialist')
+
+    # list_datasets = ['session_02_02_01.csv',
+    #                  'session_02_02_02.csv',
+    #                  'session_02_02_03.csv',
+    #                  'session_02_02_04.csv',
+    #                  'session_02_02_05.csv',
+    #                  'session_02_02_06.csv',
+    #                  ]
+    #
+    # concat_and_save_datasets(list_datasets, 'session_02_02', 'specialist')
+
+    # list_datasets = ['session_03_01_01.csv',
+    #                  'session_03_01_02.csv',
+    #                  'session_03_01_03.csv',
+    #                  'session_03_01_04.csv',
+    #                  'session_03_01_05.csv',
+    #                  'session_03_01_06.csv',
+    #                  'session_03_01_07.csv',
+    #                  ]
+    #
+    # concat_and_save_datasets(list_datasets, 'session_03_01', 'specialist')
+
+    # list_datasets = ['session_03_02_01.csv',
+    #                  'session_03_02_02.csv',
+    #                  'session_03_02_03.csv',
+    #                  'session_03_02_04.csv',
+    #                  'session_03_02_05.csv',
+    #                  'session_03_02_06.csv',
+    #                  ]
+    #
+    # concat_and_save_datasets(list_datasets, 'session_03_02', 'specialist')
+    # list_datasets = ['session_04_01_01.csv',
+    #                  'session_04_01_02.csv',
+    #                  'session_04_01_03.csv',
+    #                  'session_04_01_04.csv',
+    #                  'session_04_01_05.csv',
+    #                  ]
+    #
+    # concat_and_save_datasets(list_datasets, 'session_04_01', 'specialist')
+    # list_datasets = ['session_04_02_01.csv',
+    #                  'session_04_02_02.csv',
+    #                  'session_04_02_03.csv',
+    #                  'session_04_02_04.csv',
+    #                  'session_04_02_05.csv',
+    #                  ]
+    #
     # concat_and_save_datasets(list_datasets, 'session_04_02', 'specialist')
 
     ###################

@@ -5,7 +5,7 @@ from non_sequential_split.conf import FEATURES_DATASET_DIRECTORY, \
     VIDEO_FEATURES_DATASET_DIRECTORY, PKL_DIRECTORY_LABELS, PKL_DIRECTORY_FEATURES_VIDEO, PKL_DIRECTORY_FEATURES
 
 
-def generate_split_per_feature(session, feature, annotation_type='parents'):
+def generate_split_per_feature(session, feature, annotation_type):
     """
     It receives a feature name and generate the split train, dev, test sets for the dataset of the given feature.
     :param feature:
